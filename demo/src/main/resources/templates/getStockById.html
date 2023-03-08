@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Getting Started: Serving Web Content</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<form id='search-stock' method="GET" action="/stocks/getStockByName/${stockname}">
+  <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+  <input id='stock-id' type="text" name="stock-id"/>
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+    const form = document.getElementById('search-stock');
+    const stocknameInput = document.getElementById('stockname');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const stockname = stocknameInput.value;
+      const url = `/stocks/getStockByName/${encodeURIComponent(stockname)}`;
+      window.location.href = url;
+    });
+  </script>
+</body>
+</html>
+

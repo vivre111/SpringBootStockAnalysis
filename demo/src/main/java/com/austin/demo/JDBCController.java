@@ -34,6 +34,13 @@ public class JDBCController {
         }
     }
 
+    public List<Stock> findByName(String name){
+        try{
+            return jdbc.query(String.format("select * from %s where name=?", tableName),new Object[]{name}, BeanPropertyRowMapper.newInstance(Stock.class));
+        }catch(IncorrectResultSizeDataAccessException ex){
+            return null;
+        }
+    }
     public void createTableIfNotExist(){
         String sql = "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ?";
         int count = jdbc.queryForObject(sql, Integer.class, dbName, tableName);
