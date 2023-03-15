@@ -24,7 +24,7 @@ import java.util.Map;
 @Configuration
 class KafkaProducerConfig {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
-    @Value("${io.reflectoring.kafka.bootstrap-servers}")
+    @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
     @Bean
     public ProducerFactory<String, Stock> stockProducerFactory() {

@@ -4,6 +4,7 @@ import com.austin.demo.kafka.KafkaSender;
 import com.austin.demo.kafka.KafkaSenderWithMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.support.GenericMessage;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 //@RestController
 @Controller
@@ -26,8 +28,8 @@ public class StockController {
     private String topic;
     @Autowired
     JDBCController jdbcController;
-    @GetMapping("stocks/{id}")
-    public ResponseEntity<Stock> getStockById(@PathVariable("id")int id){
+    @GetMapping("stocks")
+    public ResponseEntity<Stock> getStockById(@RequestParam(value = "id", required = false)int id){
         Stock stock = jdbcController.findById(id);
         if (stock==null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -35,35 +37,34 @@ public class StockController {
             return new ResponseEntity<>(stock, HttpStatus.OK);
         }
     }
-    @GetMapping("stocks/getStockByName/{stockname}")
-    public ResponseEntity<List<Stock>>getStockByName(@PathVariable("stockname")String name){
+    @GetMapping("/")
+    public String index(Model model, @AuthenticationPrincipal OidcUser principal) {
+        return "index";
+    }
+
+    @ModelAttribute("profile")
+    public Map<String, Object> addProfileAttribute(@AuthenticationPrincipal OidcUser principal) {
+        return principal != null ? principal.getClaims() : null;
+    }
+
+    @GetMapping("/home")
+    public String home() {
+        return "home";
+    }
+    @GetMapping("stocks/getStockByName")
+    public String byName(Model model){
+        return "getStockByName";
+    }
+
+    @GetMapping("stocks/filter")
+    public ResponseEntity<List<Stock>>getStockByName(@RequestParam("name")String name){
         name+=".csv";
-        System.out.println("here");
-        System.out.println(name);
         List<Stock> stock = jdbcController.findByName(name);
         if (stock.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }else {
             return new ResponseEntity<>(stock, HttpStatus.OK);
         }
-    }
-    @GetMapping("/")
-    public String index(Model model, @AuthenticationPrincipal OidcUser principal) {
-        if (principal != null) {
-            model.addAttribute("profile", principal.getClaims());
-        }
-        return "home";
-    }
-    @GetMapping("/home")
-    public String home(Model model, @AuthenticationPrincipal OidcUser principal) {
-        if (principal != null) {
-            model.addAttribute("profile", principal.getClaims());
-        }
-        return "home";
-    }
-    @GetMapping("stocks/getStockByName")
-    public String byName(Model model){
-        return "getStockByName";
     }
 
     @GetMapping("/greeting")

@@ -18,7 +18,7 @@
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       const stockname = stocknameInput.value;
-      const url = `/stocks/getStockByName/${encodeURIComponent(stockname)}`;
+      const url = `/stocks/filter?name=${encodeURIComponent(stockname)}`;
       window.location.href = url;
     });
   </script>

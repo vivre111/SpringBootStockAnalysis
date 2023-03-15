@@ -12,10 +12,10 @@ class KafkaListenersExample {
 
 	private final Logger LOG = LoggerFactory.getLogger(KafkaListenersExample.class);
 
-	@KafkaListener(topics = "reflectoring-1")
-	void listener(String message) {
-		LOG.info("Listener [{}]", message);
-	}
+	//@KafkaListener(topics = "reflectoring-1")
+	//void listener(String message) {
+	//	LOG.info("Listener [{}]", message);
+	//}
 
 	/*
 	@KafkaListener(topics = { "reflectoring-1", "reflectoring-2" }, groupId = "reflectoring-group-2")
@@ -30,12 +30,12 @@ class KafkaListenersExample {
 
 	 */
 
-	@KafkaListener(topics = "reflectoring-others")
-	@SendTo("reflectoring-2")
-	String listenAndReply(String message) {
-		LOG.info("ListenAndReply [{}]", message);
-		return "This is a reply sent to 'reflectoring-2' topic after receiving message at 'reflectoring-others' topic";
-	}
+	//@KafkaListener(topics = "reflectoring-others")
+	//@SendTo("reflectoring-2")
+	//String listenAndReply(String message) {
+	//	LOG.info("ListenAndReply [{}]", message);
+	//	return "This is a reply sent to 'reflectoring-2' topic after receiving message at 'reflectoring-others' topic";
+	//}
 
 	@KafkaListener(id = "1", topics = "reflectoring-user", groupId = "reflectoring-user-mc", containerFactory = "kafkaJsonListenerContainerFactory")
 	void listenerWithMessageConverter(Stock stock) {

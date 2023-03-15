@@ -25,7 +25,7 @@ class KafkaConsumerConfig {
 	@Autowired
 	private KafkaTemplate<String, String> kafkatemplate;
 	
-    @Value("${io.reflectoring.kafka.bootstrap-servers}")
+    @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
     Map<String, Object> consumerConfigs() {
