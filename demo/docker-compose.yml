@@ -5,21 +5,8 @@ services:
     build: .
     ports:
       - '3000:3000'
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/test
-      io.reflectoring.kafka.bootstrap-servers: kafka:9092
-      SPRING_DATASOURCE_USERNAME: austin
-      SPRING_DATASOURCE_PASSWORD: poto24601
-
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-      #SPRING_KAFKA_PRODUCER_TOPIC: reflectoring-user-mc
-
     depends_on:
       - db
-      - zookeeper
-      - kafka
-    networks:
-      - mynet
 
   db:
     image: mysql:8.0.28
@@ -32,35 +19,30 @@ services:
       MYSQL_ROOT_PASSWORD: poto24601
     volumes:
       - ./data:/var/lib/mysql
-    networks:
-      - mynet
 
   zookeeper:
-    image: zookeeper
-    ports:
-      - "2182:2182"
-    networks:
-      - mynet
-  kafka:
-    image: wurstmeister/kafka
-    ports:
-      - "9092:9092"
+    image: confluentinc/cp-zookeeper:latest
     environment:
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
-      KAFKA_ADVERTISED_LISTENERS: kafka:9092
-      #KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT
-      KAFKA_LISTENERS: 0.0.0.0:9092
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      #KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf"
-      #KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
-      #KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      maxClientCnxns: 1000
+    ports:
+      - 22181:2181
+    volumes:
+      - ./data:/var/lib/zookeeper
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
     depends_on:
       - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENERS: PLAINTEXT://localhost:9092
     volumes:
-      - ./:/etc/kafka
-    networks:
-      - mynet
-
-networks:
-  mynet:
+      - ./data:/var/lib/kafka
+    command:
+      sh -c "sleep 10 && /etc/confluent/docker/run"

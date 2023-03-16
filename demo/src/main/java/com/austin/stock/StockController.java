@@ -1,10 +1,9 @@
-package com.austin.demo;
+package com.austin.stock;
 
-import com.austin.demo.kafka.KafkaSender;
-import com.austin.demo.kafka.KafkaSenderWithMessageConverter;
+import com.austin.stock.kafka.KafkaSender;
+import com.austin.stock.kafka.KafkaSenderWithMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.support.GenericMessage;

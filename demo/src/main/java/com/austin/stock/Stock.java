@@ -1,4 +1,4 @@
-package com.austin.demo;
+package com.austin.stock;
 
 import lombok.Getter;
 import lombok.Setter;

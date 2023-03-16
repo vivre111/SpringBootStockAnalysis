@@ -1,4 +1,4 @@
-package com.austin.demo;
+package com.austin.stock;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -31,6 +31,14 @@ public class JDBCController {
             return jdbc.queryForObject(String.format("select * from %s where id=?", tableName), BeanPropertyRowMapper.newInstance(Stock.class), id);
         }catch(IncorrectResultSizeDataAccessException ex){
             return null;
+        }
+    }
+    public void insertData(){
+        try{
+            createTableIfNotExist();
+            insertAllCSV(80);
+        }catch (FileNotFoundException | ParseException e){
+            System.out.println("file not found");
         }
     }
 

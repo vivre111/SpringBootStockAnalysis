@@ -1,4 +1,4 @@
-package com.austin.demo.kafka;
+package com.austin.stock.kafka;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;

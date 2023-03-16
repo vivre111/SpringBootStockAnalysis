@@ -54,6 +54,12 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>
@@ -63,5 +69,6 @@
 			</plugin>
 
 		</plugins>
+		<finalName>spring-boot-docker</finalName>
 	</build>
 </project>
